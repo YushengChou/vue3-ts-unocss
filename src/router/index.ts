@@ -8,7 +8,11 @@ const routes = [
   {
     path: '/calculator',
     component: () => import('@/pages/common/Calculator.vue')
-  }
+  },
+  {
+    path: '/countdown',
+    component: () => import('@/pages/common/Countdown.vue')
+  },
 ]
 
 export const router = createRouter({

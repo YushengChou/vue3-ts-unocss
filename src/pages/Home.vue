@@ -83,7 +83,7 @@ const features: Feature[] = [
   { name: '計算機', path: '/calculator', desc: '簡單計算功能' },
   // { name: '日期計算', path: '/date-diff', desc: '計算日期差異' },
   // { name: '擲骰子', path: '/dice', desc: '模擬骰子遊戲' },
-  // { name: '倒數計時', path: '/countdown', desc: '倒數計時器' }
+  { name: '倒數計時', path: '/countdown', desc: '倒數計時器' }
 ]
 </script>
 
