@@ -1,31 +1,36 @@
-const theme = ref<'light' | 'dark'>('light')
+const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | null
+
+const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+  ? 'dark'
+  : 'light'
+
+const theme = ref<'light' | 'dark'>(savedTheme || systemTheme)
+
+// 如果 localStorage 沒有，就存 system theme
+if (!savedTheme) {
+  localStorage.setItem('theme', theme.value)
+}
+console.log('theme', theme.value);
+
+// 套用 class
+if (theme.value === 'dark') {
+  document.documentElement.classList.add('dark')
+} else {
+  document.documentElement.classList.remove('dark')
+}
 
 export function useTheme() {
 
-  const setTheme = (mode: 'light' | 'dark') => {
-    theme.value = mode
-    localStorage.setItem('theme', mode)
-
-    if (mode === 'dark')
-      document.documentElement.classList.add('dark')
-    else
-      document.documentElement.classList.remove('dark')
-  }
-
   const toggleTheme = () => {
-    setTheme(theme.value === 'light' ? 'dark' : 'light')
-  }
+    theme.value = theme.value === 'light' ? 'dark' : 'light'
 
-  // 初始化
-  const savedTheme = localStorage.getItem('theme')
+    if (theme.value === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
 
-  if (savedTheme === 'dark' || savedTheme === 'light') {
-    setTheme(savedTheme)
-  } else if (
-    window.matchMedia &&
-    window.matchMedia('(prefers-color-scheme: dark)').matches
-  ) {
-    setTheme('dark')
+    localStorage.setItem('theme', theme.value)
   }
 
   return { theme, toggleTheme }
