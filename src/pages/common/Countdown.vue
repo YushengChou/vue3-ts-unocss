@@ -6,14 +6,14 @@
     "
   >
   <div class="flex flex-col items-center justify-center p-6 bg-white/25 dark:bg-[rgba(30,41,59,0.4)] rounded-2xl shadow-lg w-80">
-    <h1 class="text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4">{{ formatTime(time) }}</h1>
+    <h1 class="text-5xl font-bold text-gray-900 dark:text-gray-100 mb-6">{{ formatTime(time) }}</h1>
 
-    <div class="flex items-center gap-2 mb-4">
+    <div class="flex items-center gap-2 mb-6">
       <input
         type="number"
         v-model.number="inputTime"
         placeholder="秒數"
-        class="w-20 p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+        class="w-30 p-4 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100"
       />
     </div>
 
@@ -27,8 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onUnmounted } from 'vue'
-
+const { show } = useAlert()
 const time = ref<number>(0)
 const inputTime = ref<number>(60)
 let timer: ReturnType<typeof setInterval> | null = null
@@ -44,7 +43,7 @@ const start = (): void => {
     } else {
       clearInterval(timer!)
       timer = null
-      alert('時間到！')
+      show('時間到！', 'warning')
     }
   }, 1000)
 }

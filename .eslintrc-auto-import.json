@@ -78,6 +78,7 @@
     "toValue": true,
     "triggerRef": true,
     "unref": true,
+    "useAlert": true,
     "useAttrs": true,
     "useCssModule": true,
     "useCssVars": true,
