@@ -17,6 +17,10 @@ const routes = [
     path: '/dice',
     component: () => import('@/pages/common/Dice.vue')
   },
+  {
+    path: '/datecalculator',
+    component: () => import('@/pages/common/DateCalculator.vue')
+  },
 ]
 
 export const router = createRouter({
