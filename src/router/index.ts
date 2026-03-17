@@ -13,6 +13,10 @@ const routes = [
     path: '/countdown',
     component: () => import('@/pages/common/Countdown.vue')
   },
+  {
+    path: '/dice',
+    component: () => import('@/pages/common/Dice.vue')
+  },
 ]
 
 export const router = createRouter({

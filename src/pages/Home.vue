@@ -13,7 +13,7 @@
         <!-- 選單本體 -->
         <div
           @click.stop
-          class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-b-xl p-4 flex flex-col space-y-2 z-20 md:hidden pointer-events-auto"
+          class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-b-xl p-4 flex flex-col space-y-2 z-22 md:hidden pointer-events-auto"
         >
           <button
             @click.stop="toggleTheme"
@@ -82,8 +82,8 @@ interface Feature {
 const features: Feature[] = [
   { name: '計算機', path: '/calculator', desc: '簡單計算功能' },
   // { name: '日期計算', path: '/date-diff', desc: '計算日期差異' },
-  // { name: '擲骰子', path: '/dice', desc: '模擬骰子遊戲' },
-  { name: '倒數計時', path: '/countdown', desc: '倒數計時器' }
+  { name: '倒數計時', path: '/countdown', desc: '倒數計時器' },
+  { name: '擲骰子', path: '/dice', desc: '擲骰子' },
 ]
 </script>
 
