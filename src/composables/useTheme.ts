@@ -10,7 +10,6 @@ const theme = ref<'light' | 'dark'>(savedTheme || systemTheme)
 if (!savedTheme) {
   localStorage.setItem('theme', theme.value)
 }
-console.log('theme', theme.value);
 
 // 套用 class
 if (theme.value === 'dark') {

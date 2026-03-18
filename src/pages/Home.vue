@@ -95,6 +95,7 @@ const features: Feature[] = [
   { name: '倒數計時', path: '/countdown', desc: '倒數計時器' },
   { name: '擲骰子', path: '/dice', desc: '擲骰子' },
   { name: '日期計算', path: '/datecalculator', desc: '計算日期差異' },
+  { name: '大轉盤', path: '/wheel', desc: '大轉盤' },
 ]
 </script>
 
