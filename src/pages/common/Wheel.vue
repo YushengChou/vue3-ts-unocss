@@ -1,24 +1,21 @@
 <script setup lang="ts">
 import gsap from 'gsap'
 
-const inputText = ref('蘋果,香蕉,西瓜,芒果')
+const inputText = ref('便當便當,咖哩,魯肉飯魯肉飯,牛')
 const items = ref<string[]>([])
 const wheelRef = ref<HTMLDivElement | null>(null)
 const result = ref('')
 const rotating = ref(false)
-const labelRefs = ref<Array<HTMLDivElement | null>>([])
+const labelRefs = ref<Record<number, HTMLDivElement>>({})
+const setLabelRef = (el: HTMLDivElement | null, index: number) => {
+  if (el) {
+    labelRefs.value[index] = el
+  }
+}
 
 /** ✅ 累加旋轉角度（關鍵🔥） */
 const currentRotation = ref(0)
-
-const colors = [
-  '#60a5fa',
-  '#34d399',
-  '#fbbf24',
-  '#f87171',
-  '#a78bfa',
-  '#22d3ee',
-]
+const finished = ref(false)
 
 /** 解析輸入 */
 const parseItems = () => {
@@ -30,6 +27,10 @@ const parseItems = () => {
 
 watch(inputText, parseItems, { immediate: true })
 
+watch(items, () => {
+  labelRefs.value = {}
+})
+
 /** 每一塊角度 */
 const anglePerItem = computed(() => {
   return 360 / (items.value.length || 1)
@@ -37,13 +38,16 @@ const anglePerItem = computed(() => {
 
 /** 轉盤樣式 */
 const wheelStyle = computed(() => {
+  const count = items.value.length
+
   const segments = items.value.map((_, i) => {
     const start = i * anglePerItem.value
     const end = start + anglePerItem.value
-    const color = colors[i % colors.length]
 
-    /** cc = 透明度 */
-    return `${color}cc ${start}deg ${end}deg`
+    // 🎨 HSL 平均分布（關鍵🔥）
+    const hue = Math.round((i / count) * 360)
+
+    return `hsl(${hue}, 70%, 60%) ${start}deg ${end}deg`
   })
 
   return {
@@ -53,7 +57,7 @@ const wheelStyle = computed(() => {
 
 /** 🎯 旋轉（已修正多次旋轉 bug） */
 const spin = async () => {
-  if (rotating.value || items.value.length === 0) return
+  if (rotating.value || items.value.length === 0 || finished.value) return
 
   rotating.value = true
   result.value = ''
@@ -75,19 +79,21 @@ const spin = async () => {
     ease: 'power4.out',
     onComplete: () => {
       result.value = items.value[index]
+      finished.value = true // 🔒 鎖住
       // ✅ 選中扇形動畫
       const selectedEl = labelRefs.value[index]
+
       if (selectedEl) {
         gsap.fromTo(
           selectedEl,
-          { scale: 1, textShadow: '0 0 0px #fff' },
+          { scale: 1 },
           {
             scale: 1.3,
-            textShadow: '0 0 15px #fff, 0 0 30px #facc15',
             duration: 0.3,
             yoyo: true,
             repeat: 3,
-            ease: 'power1.inOut'
+            ease: 'power1.inOut',
+            transformOrigin: 'center center'
           }
         )
       }
@@ -110,10 +116,11 @@ const resetWheel = () => {
   currentRotation.value = 0
   result.value = ''
   rotating.value = false
+  finished.value = false // 🔓 解鎖
   // 重置文字縮放、光暈
-  labelRefs.value.forEach(el => {
+  Object.values(labelRefs.value).forEach(el => {
     if (el) {
-      gsap.set(el, { scale: 1, textShadow: '0 0 0px #fff' })
+      gsap.set(el, { scale: 1 })
     }
   })
 }
@@ -143,6 +150,7 @@ const getLabelStyle = (i: number) => {
 
   return {
     transform: `
+      translate(-50%, -50%)
       rotate(${angle + mid}deg)
       translateY(-${radius}px)
     `
@@ -182,9 +190,13 @@ const getLabelStyle = (i: number) => {
           :key="i"
           class="label"
           :style="getLabelStyle(i)"
-          :ref="el => labelRefs[i] = el"
         >
-          {{ item }}
+          <div
+            class="label-inner"
+            :ref="el => setLabelRef(el, i)"
+          >
+            {{ item }}
+          </div>
         </div>
       </div>
     </div>
@@ -193,7 +205,7 @@ const getLabelStyle = (i: number) => {
     <div class="flex gap-4">
       <button
         @click="spin"
-        :disabled="rotating"
+        :disabled="rotating || finished"
         class="px-6 py-2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 disabled:opacity-50 transition"
       >
         旋轉
@@ -265,6 +277,9 @@ const getLabelStyle = (i: number) => {
     0 1px 2px rgba(0,0,0,0.2);
 
   @apply dark:text-shadow-[0_2px_4px_rgba(0,0,0,0.8)];
+  .label-inner {
+    display: inline-block;
+  }
 }
 
 /** 🔺 指針（升級重點🔥） */
