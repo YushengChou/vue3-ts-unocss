@@ -5,7 +5,7 @@ import UnoCSS from 'unocss/vite'
 import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
-  base: '/vue3-ts-unocss/',
+  base: process.env.NODE_ENV === 'production' ? '/vue3-ts-unocss/' : '/',
   plugins: [
     vue(),
     AutoImport({
