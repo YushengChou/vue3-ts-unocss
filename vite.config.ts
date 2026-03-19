@@ -5,6 +5,7 @@ import UnoCSS from 'unocss/vite'
 import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
+  base: '/frontend-100/',
   plugins: [
     vue(),
     AutoImport({
@@ -27,5 +28,8 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  build: {
+    sourcemap: false
   }
 })
