@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import gsap from 'gsap'
 
-const inputText = ref('便當便當,咖哩,魯肉飯魯肉飯,牛')
+const inputText = ref('1,two,選項三,四,？？？？')
 const items = ref<string[]>([])
 const wheelRef = ref<HTMLDivElement | null>(null)
 const result = ref('')
 const rotating = ref(false)
 const labelRefs = ref<Record<number, HTMLDivElement>>({})
-const setLabelRef = (el: HTMLDivElement | null, index: number) => {
-  if (el) {
+  const setLabelRef = (el: Element | ComponentPublicInstance | null, index: number) => {
+  if (el instanceof HTMLDivElement) {
     labelRefs.value[index] = el
   }
 }
